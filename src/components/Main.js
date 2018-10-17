@@ -88,7 +88,6 @@ class ControllerUnits extends React.Component {
 
   // 点击控制组件按钮
   handleClick (e) {
-    console.log(this.props)
     // 点击的是当前正在选中态的按钮 则翻转图片 否则将对应图片居中
     if (this.props.arrange.isCenter) {
       this.props.inverse()
