@@ -20,21 +20,22 @@ imageDatas = (function genImageURL (imageDataArr) {
   return imageDataArr
 })(imageDatas)
 
+// 图片组件
 class ImgFigure extends React.Component {
   constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   // imgFigure点击处理函数
   handleClick (e) {
     if (this.props.arrange.isCenter) {
-      this.props.inverse();
+      this.props.inverse()
     } else {
-      this.props.center();
+      this.props.center()
     }
-    e.stopPropagation();
-    e.preventDefault();
+    e.stopPropagation()
+    e.preventDefault()
   }
 
   render () {
@@ -59,7 +60,7 @@ class ImgFigure extends React.Component {
 
     let figureClass = classNames({
       'img-figure': true,
-      'is-inverse': this.props.arrange.isInverse   // 反转样式
+      'is-inverse': this.props.arrange.isInverse // 反转样式
     });
 
     return (
@@ -74,6 +75,47 @@ class ImgFigure extends React.Component {
           </div>
         </figcaption>
       </figure>
+    )
+  }
+}
+
+// 控制组件
+class ControllerUnits extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  // 点击控制组件按钮
+  handleClick (e) {
+    console.log(this.props)
+    // 点击的是当前正在选中态的按钮 则翻转图片 否则将对应图片居中
+    if (this.props.arrange.isCenter) {
+      this.props.inverse()
+    } else {
+      this.props.center()
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  render () {
+    let controllerUnitClassName = 'controller-unit'
+
+    // 如果对应的是居中的图片 显示控制按钮的居中态
+    if (this.props.arrange.isCenter) {
+      controllerUnitClassName += ' is-center'
+    
+      // 如果同时对应的是翻转图片 显示翻转态
+      if (this.props.arrange.isInverse) {
+        controllerUnitClassName += ' is-inverse'
+      }
+    }
+    
+
+    return (
+      <span className={controllerUnitClassName}  onClick={this.handleClick}></span>
     )
   }
 }
@@ -155,7 +197,7 @@ class AppComponent extends React.Component {
       vPosRangeTopY = vPosRange.topY,
       vPosRangeX = vPosRange.x,
       imgsArrangeTopArr = [],
-      topImgNum = Math.ceil(Math.random() * 2), // 取一个或者不取
+      topImgNum = Math.floor(Math.random() * 2), // 取一个或者不取
       topImgSpliceIndex = 0,
       imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
@@ -271,8 +313,13 @@ class AppComponent extends React.Component {
         }
       }
 
-      imgFigures.push(<ImgFigure ref={'imgFigure' + index} data={value} key={index} 
-        arrange={this.state.imgsArrangeArr[index]} 
+      imgFigures.push(<ImgFigure ref={'imgFigure' + index} data={value} key={index}
+        arrange={this.state.imgsArrangeArr[index]}
+        inverse={this.inverse.bind(this, index)}
+        center={this.center.bind(this, index)} />)
+
+      controllerUnits.push(<ControllerUnits key={index}
+        arrange={this.state.imgsArrangeArr[index]}
         inverse={this.inverse.bind(this, index)}
         center={this.center.bind(this, index)} />)
     })
